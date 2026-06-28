@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Strength Checker</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 360px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .toggle {
+            font-size: 12px;
+            color: #667eea;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .strength {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .weak { color: red; }
+        .medium { color: orange; }
+        .strong { color: green; }
+
+        .bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+        }
+
+        ul {
+            text-align: left;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2> Password Checker</h2>
+
+    <form method="POST">
+        <input type="password" name="password" id="password" placeholder="Enter Password" required>
+
+        <div class="toggle" onclick="togglePassword()">Show Password</div>
+
+        <button type="submit">Check</button>
+    </form>
+
+    {% if result %}
+        <div class="strength
+            {% if 'Weak' in result %}weak
+            {% elif 'Medium' in result %}medium
+            {% else %}strong
+            {% endif %}">
+            Strength: {{ result }}
+        </div>
+
+        <div class="bar">
+            <div class="fill" id="bar"></div>
+        </div>
+
+        {% if suggestions %}
+            <p>Suggestions:</p>
+            <ul>
+                {% for s in suggestions %}
+                    <li>{{ s }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</div>
+
+<script>
+    function togglePassword() {
+        let p = document.getElementById("password");
+        p.type = (p.type === "password") ? "text" : "password";
+    }
+
+    // Strength bar logic
+    window.onload = function () {
+        let result = "{{ result }}";
+        let bar = document.getElementById("bar");
+
+        if (result.includes("Weak")) {
+            bar.style.width = "30%";
+            bar.style.background = "red";
+        } else if (result.includes("Medium")) {
+            bar.style.width = "65%";
+            bar.style.background = "orange";
+        } else if (result.includes("Strong")) {
+            bar.style.width = "100%";
+            bar.style.background = "green";
+        }
+    }
+</script>
+
+</body>
+</html>
